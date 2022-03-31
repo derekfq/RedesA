@@ -10,3 +10,5 @@
 void send_file(JsonEnvio *data, int sockfd);
 
 int envio(JsonEnvio data);
+
+void preencher(JsonEnvio data);

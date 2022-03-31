@@ -18,7 +18,7 @@ int main(){
     char IpDestino[15];
     clock_t timestamp;
     JsonEnvio JsonE;
-    mainServer();
+    mainServer(); //Verificar como vai fazer com os terminais (Perguntar Xastre)
     while(true){
         printf("\nIP Destino:");
         scanf("%s", IpDestino);

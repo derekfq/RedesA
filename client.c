@@ -60,6 +60,17 @@ int envio(JsonEnvio data){
 
     printf("Terminando a conexão.\n");
     close(sockfd);
-
+    //Ver como vai enviar o Jeiso 
     return 0;
+}
+
+void preencher(JsonEnvio data){
+printf("Ip de Destino: ");
+scanf("%d",&data.IpDestino);
+printf("\nPorta de Destino: ");
+scanf("%d",&data.PortaDestino);
+printf("\nMensagem: ");
+scanf("%s",&data.Mensagem);
+// colocar nosso ip e essas coisa tudo
+
 }

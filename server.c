@@ -85,6 +85,6 @@ int mainServer(){
     new_sock = accept(sockfd, (struct sockaddr *)&new_addr, &addr_size);
     // write_file(new_sock);
     // printf("Dados escritos no arquivo com sucesso.\n");
-
+    // Ta faltando Pegar a mensagem e possibilitar a resposta Direta somente escrevendo a mensagem
     return 0;
 }
