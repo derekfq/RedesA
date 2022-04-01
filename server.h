@@ -10,6 +10,7 @@
 #include <netinet/in.h>
 #include <net/if.h>
 #include <arpa/inet.h>
+#include "json.h"
 #define SIZE 1024
 
 char* ColetarIP();

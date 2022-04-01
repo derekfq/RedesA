@@ -20,17 +20,18 @@ void send_file(JsonEnvio *data, int sockfd){
     //}
 }
 
-int envio(JsonEnvio data){
-    char *ip = "127.0.0.1";
+int envio(FILE* FileName){
+    char *ip = ColetarIP();
     int port = 8080;
     int e;
 
     int sockfd;
     struct sockaddr_in server_addr;
-    //FILE *fp;
-    //char *filename = "send.txt";
+    FILE *fp;
+    char *filename = "Request.json";
 
-    sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    //AF_INET (IPv4)
+    sockfd = socket(AF_INET, SOCK_DGRAM, 0); //SOCK_STREAM FOR TCP AND SOCK_DGRAM FOR UDP 
     if (sockfd < 0){
         perror("Erro no socket");
         exit(1);
@@ -48,14 +49,19 @@ int envio(JsonEnvio data){
     }
     printf("Conectado com Servidor.\n");
 
-    //fp = fopen(filename, "r");
-    //if (fp == NULL){
-    //    perror("Erro ao ler o arquivo.");
-   //     exit(1);
-    //}
+    JsonEnvio MensagemEnvio;
+    preencher(MensagemEnvio, port);
+    MountJsonEnvio(MensagemEnvio);
 
-    send_file(&data, sockfd);
+    FILE *fp = fopen("Envio.json", "r");
+    if (fp == NULL){
+        perror("Erro ao ler o arquivo.");
+        exit(1);
+    }
 
+    send_file(&fp, sockfd);
+
+    //Receber o ACK and the response message 
     printf("Dados do arquivo enviados com sucesso.\n");
 
     printf("Terminando a conexão.\n");
@@ -64,13 +70,21 @@ int envio(JsonEnvio data){
     return 0;
 }
 
-void preencher(JsonEnvio data){
-printf("Ip de Destino: ");
-scanf("%d",&data.IpDestino);
-printf("\nPorta de Destino: ");
-scanf("%d",&data.PortaDestino);
-printf("\nMensagem: ");
-scanf("%s",&data.Mensagem);
-// colocar nosso ip e essas coisa tudo
+void preencher(JsonEnvio data,int port){
+    data.Porta_origem = port;
+    data.Timestamp = clock();
+    strcpy(data.Ip_origem, ColetarIP());
+    printf("Ip de Destino: ");
+    scanf("%d",&data.Ip_destino);
+    printf("\nPorta de Destino: ");
+    scanf("%d",&data.Porta_destino);
+    printf("\nMensagem: ");
+    scanf("%s",data.Mensagem);
+    return data;
+    // colocar nosso ip e essas coisa tudo
 
 }
+
+///CheckList
+// Verficar a resposta do ack
+// Definição de um tempo pro ack 
