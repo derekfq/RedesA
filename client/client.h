@@ -7,8 +7,6 @@
 
 #define SIZE 1024
 
-void send_file(JsonEnvio *data, int sockfd);
+void send_file(FILE *data, int sockfd,struct sockaddr_in server_addr);
 
-int envio(JsonEnvio data);
-
-void preencher(JsonEnvio data);
+JsonEnvio preencher(JsonEnvio data, int port);

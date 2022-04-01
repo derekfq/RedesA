@@ -2,6 +2,14 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <netinet/in.h>
+#include <net/if.h>
+#include <arpa/inet.h>
 
 /*Ip_origem
 o Ip_destino
@@ -52,15 +60,10 @@ typedef struct jsonR{
     char Mensagem_resposta[1000];
 }JsonResposta;
 
-
-void MountJsonEnvio(JsonEnvio JE);
-
 JsonEnvio RecebeJsonEnvio();
 
 void MountJsonACK(JsonAck JA);
 
-JsonAck RecebeJsonACK();
-
 void MountJsonResponse(JsonResposta JR);
 
-JsonResposta RecebeJsonResponse();
+char *ColetarIP();

@@ -12,7 +12,3 @@
 #include <arpa/inet.h>
 #include "json.h"
 #define SIZE 1024
-
-char* ColetarIP();
-
-int mainServer();

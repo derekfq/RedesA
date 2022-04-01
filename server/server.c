@@ -19,26 +19,10 @@ void write_file(int sockfd){
     return;
 }
 
-char *ColetarIP(){
-    int fd = socket(AF_INET, SOCK_DGRAM, 0);
-    struct ifreq ifr;
-
-    // Endereço IPv4
-    ifr.ifr_addr.sa_family = AF_INET;
-
-    // Endereço IP dentro de "enp2s0"
-    strncpy(ifr.ifr_name, "enp2s0", IFNAMSIZ - 1);
-    ioctl(fd, SIOCGIFADDR, &ifr);
-    close(fd);
-    // printf("%s\n", inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr));
-
-    return inet_ntoa(((struct sockaddr_in *)&ifr.ifr_addr)->sin_addr);
-}
-
-int mainServer(){
+int main(){
     char *ip = ColetarIP();
     int port = 8080;
-    int e;
+    int e,n;
     int sockfd, new_sock;
     struct sockaddr_in server_addr, new_addr;
     socklen_t addr_size;
@@ -62,15 +46,21 @@ int mainServer(){
     }
     printf("Binding feita com sucesso.\n");
 
+    addr_size = sizeof(&new_addr);
+    n = recvfrom(sockfd, (char *)buffer, SIZE,
+                MSG_WAITALL, ( struct sockaddr *) &new_addr,
+                &addr_size);
+    buffer[n] = '\0';
+    printf("Client : %s\n", buffer);
+    /*
     if (listen(sockfd, 10) == 0)
         printf("Listening....\n");
     else{
         perror("Erro ao realizar listening");
         exit(1);
     }
-
+*/
     // recive the file
-    addr_size = sizeof(&new_addr);
     new_sock = accept(sockfd, (struct sockaddr *)&new_addr, &addr_size);
     if (new_sock != -1){
         write_file(new_sock);

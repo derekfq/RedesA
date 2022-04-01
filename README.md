@@ -55,7 +55,7 @@ informações:
 
 # Como Executar
 * Baixe o arquivo compactado presente nesse repositorio.
-* execute no terminal o comando gcc -
+* execute no terminal o comando 
 * 
 * 
 
