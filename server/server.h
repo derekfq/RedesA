@@ -12,3 +12,7 @@
 #include <arpa/inet.h>
 #include "json.h"
 #define SIZE 1024
+
+void envio(FILE *arq, int sockfd, struct sockaddr_in addr);
+
+void preencher_json(int sockfd, struct sockaddr_in addr);

@@ -1,9 +1,9 @@
 #include "json.h"
 #include <arpa/inet.h>
 
-JsonEnvio RecebeJsonEnvio(){
+JsonEnvio RecebeJsonEnvio(FILE *arq){
 	JsonEnvio JE;
-	FILE *arq = fopen("Request.json", "r");
+	//FILE *arq = fopen("Data.json", "r");
 	fscanf(arq, "{\n\t\"Ip_origem\":\"%s\",", JE.Ip_origem);
 	fscanf(arq, "\n\t\"Ip_destino\":\"%s\",", JE.Ip_destino);
 	fscanf(arq, "\n\t\"Porta_origem\":\"%d\",", &JE.Porta_origem);
@@ -11,17 +11,17 @@ JsonEnvio RecebeJsonEnvio(){
 	fscanf(arq, "\n\t\"Timestamp\":\"%ld\",", &JE.Timestamp);
 	fscanf(arq, "\n\t\"Mensagem\":\"%s\"", JE.Mensagem);
 	fscanf(arq, "\n\t}");
-	if(arq)
-		fclose(arq);
+	/*if(arq)
+		fclose(arq);*/
 	return JE;
 }
 
-void MountJsonACK(JsonAck JA){
-	FILE *arq = fopen("Ack.json", "w");
-	if(!arq){
+void MountJsonACK(JsonAck JA, FILE *arq){
+	//FILE *arq = fopen("Data.json", "w");
+	/*if(!arq){
 		printf("\n Erro ao criar o arquivo Json ACK");
 		exit(1);
-	}
+	}*/
 	fprintf(arq, "{\n\t\"Ip_origem\":\"%s\",", JA.Ip_origem);
 	fprintf(arq, "\n\t\"Ip_destino\":\"%s\",", JA.Ip_destino);
 	fprintf(arq, "\n\t\"Porta_origem\":\"%d\",", JA.Porta_origem);
@@ -30,11 +30,13 @@ void MountJsonACK(JsonAck JA){
 	fprintf(arq, "\n\t\"Timestamp_resposta\":\"%ld\",", JA.Timestamp_resposta);
 	fprintf(arq, "\n\t\"Ack\":\"%d\"", JA.Ack ? 1 : 0);
 	fprintf(arq, "\n\t}");
+	if(arq)
+		fclose(arq);
 	fclose(arq);
 }
 
 void MountJsonResponse(JsonResposta JR){
-	FILE *arq = fopen("Response.json", "w");
+	FILE *arq = fopen("Data.json", "a");
 	if(!arq){
 		printf("\n Erro ao criar o arquivo Json de resposta");
 		exit(1);

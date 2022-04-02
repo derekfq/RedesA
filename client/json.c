@@ -2,7 +2,7 @@
 #include <arpa/inet.h>
 
 void MountJsonEnvio(JsonEnvio JE){
-	FILE *arq = fopen("Request.json", "w");
+	FILE *arq = fopen("Data.json", "w");
 	if(!arq){
 		printf("\n Erro ao criar o arquivo Json de envio");
 		exit(1);
@@ -20,7 +20,8 @@ void MountJsonEnvio(JsonEnvio JE){
 JsonAck RecebeJsonACK(){
 	JsonAck JA;
 	int boo;
-	FILE *arq = fopen("Ack.json", "r");
+	FILE *arq = fopen("Data.json", "r");
+	// TODO: coletar parte do envio antes do ack
 	fscanf(arq, "{\n\t\"Ip_origem\":\"%s\",", JA.Ip_origem);
 	fscanf(arq, "\n\t\"Ip_destino\":\"%s\",", JA.Ip_destino);
 	fscanf(arq, "\n\t\"Porta_origem\":\"%d\",", &JA.Porta_origem);
@@ -40,7 +41,8 @@ JsonAck RecebeJsonACK(){
 
 JsonResposta RecebeJsonResponse(){
 	JsonResposta JR;
-	FILE *arq = fopen("Ack.json", "r");
+	FILE *arq = fopen("Data.json", "r");
+	// TODO: coletar parte do envio e ack antes do response
 	fscanf(arq, "{\n\t\"Ip_origem\":\"%s\",", JR.Ip_origem);
 	fscanf(arq, "\n\t\"Ip_destino\":\"%s\",", JR.Ip_destino);
 	fscanf(arq, "\n\t\"Porta_origem\":\"%d\",", &JR.Porta_origem);

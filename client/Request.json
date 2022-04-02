@@ -1,8 +1,0 @@
-{
-	"Ip_origem":"172.16.2.30",
-	"Ip_destino":"172.16.1.216",
-	"Porta_origem":"8080",
-	"Porta_destino":"8080",
-	"Timestamp":"140725016211912",
-	"Mensagem":"TESTE"
-}

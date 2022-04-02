@@ -4,89 +4,100 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include "client.h"
+#define TAM 1024
 
-#define SIZE 1024
+void envio(FILE *arq, int socket_client, struct sockaddr_in end){
+    int len;
+    char buffer[TAM];
 
-void send_file(FILE *data, int sockfd,struct sockaddr_in server_addr){
-    int n;
-    //char data[SIZE] = {0};
-
-    //while (fgets(data, SIZE, fp) != NULL){
-
-        if (sendto(sockfd, (const char *)"Ack.json", fseek(data, 0L, SEEK_END), MSG_CONFIRM, (const struct sockaddr *) &server_addr, sizeof(server_addr)) == -1){
-            perror("Erro ao enviar o arquivo.");
+    while(fgets(buffer, TAM, arq) != NULL){
+        printf("Enviando dados: %s", buffer);
+        len = sendto(socket_client, buffer, TAM, 0, (struct sockaddr *)&end, sizeof(end));
+        if(len == -1){
+            printf("Erro ao enviar dados para o servidor.\n");
             exit(1);
         }
-        bzero((void *)data, SIZE);
-    //}
+        bzero(buffer, TAM);
+    }
+
+    // Sending the 'END'
+    strcpy(buffer, "END");
+    sendto(socket_client, buffer, TAM, 0, (struct sockaddr *)&end, sizeof(end));
+    if(arq)
+        fclose(arq);
+}
+
+//Usado para receber o JSON de ACK e de resposta
+void preenche_json(int socket_client, struct sockaddr_in end){
+    char buffer[TAM];
+    socklen_t tam_end;
+    FILE *arq = fopen("client.json", "a");
+
+    // Recebendo os dados do servidor
+    while(true){
+        tam_end = sizeof(end);
+        if(recvfrom(socket_client, buffer, TAM, 0, (struct sockaddr *)&end, &tam_end) == -1){
+            printf("Erro ao receber dados.\n");
+            exit(1);
+        }
+
+        if(strcmp(buffer, "END") == 0)
+            break;
+        printf("Recebendo dados: %s", buffer);
+        fprintf(arq, "%s", buffer);
+        bzero(buffer, TAM);
+    }
+    fclose(arq);
 }
 
 int main(){
-    char *ip = ColetarIP();
-    int port = 8080;
-    int e;
+    char ip[15] = "127.0.0.1\0"; // Usuário insere isso
+    const int porta = 8080;
+    FILE *arq = fopen("client.json", "r");
+    int socket_client, len;
+    struct sockaddr_in client, server;
 
-    int sockfd;
-    struct sockaddr_in server_addr;
-    FILE *fp;
-    char *filename = "Request.json";
-
-    //AF_INET (IPv4)
-    sockfd = socket(AF_INET, SOCK_DGRAM, 0); //SOCK_STREAM FOR TCP AND SOCK_DGRAM FOR UDP
-    if (sockfd < 0){
-        perror("Erro no socket");
+    if(arq == NULL){
+        printf("Erro ao ler o arquivo.\n");
         exit(1);
     }
-    printf("Socket do servidor criado com sucesso.\n");
-
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = port;
-    server_addr.sin_addr.s_addr = inet_addr(ip);
-
-    e = connect(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr));
-    if (e == -1){
-        perror("Erro no socket");
+    // Criando o socket (SOCK_DGRAM -> UDP)
+    socket_client = socket(AF_INET, SOCK_DGRAM, 0);
+    if(socket_client < 0){
+        printf("Erro no socket.\n");
         exit(1);
     }
-    printf("Conectado com Servidor.\n");
+    server.sin_family = AF_INET;
+    server.sin_port = porta;
+    server.sin_addr.s_addr = inet_addr(ip);
 
-    JsonEnvio MensagemEnvio;
-    //preencher(MensagemEnvio, port); // lembrar de colocar o ip de parametro
-    //MountJsonEnvio(MensagemEnvio);
+    // Envia os dados do arquivo para o servidor
+    envio(arq, socket_client, server);
+    if(arq)
+        fclose(arq);
+    printf("Dados enviados com sucesso.\n");
 
-    fp = fopen("Request.json", "r");
-    if (fp == NULL){
-        perror("Erro ao ler o arquivo.");
+    // Aguardando ACK
+    if(bind(socket_client, (struct sockaddr*) &server, sizeof(server)) < 0){
+        printf("Erro na bind.\n");
         exit(1);
     }
 
-    send_file(fp, sockfd,server_addr);
+    preenche_json(socket_client, client);
+    printf("O dado enviado foi entregue ao destinatário com sucesso.\n");
 
-    //Receber o ACK and the response message
-    printf("Dados do arquivo enviados com sucesso.\n");
+    //Esperando a mensagem de resposta.
+    preenche_json(socket_client, client);
 
-    printf("Terminando a conexão.\n");
-    close(sockfd);
-    //Ver como vai enviar o Jeiso
+    //Envia ACK Rsposta
+    arq = fopen("ack.json", "r");
+    envio(arq, socket_client, server);
+    if(arq)
+        fclose(arq);
+    //Imprimir mensagem de resposta (abrir o arquivo json e exibir na tela as informações)
+    printf("Desconectando do servidor...\n");
+
+    close(socket_client);
+
     return 0;
 }
-
-JsonEnvio preencher(JsonEnvio data,int port){
-    data.Porta_origem = port;
-    data.Timestamp = clock();
-    strcpy(data.Ip_origem, ColetarIP());
-    printf("Ip de Destino: ");
-    scanf("%s",data.Ip_destino);
-    printf("\nPorta de Destino: ");
-    scanf("%d",&data.Porta_destino);
-    getchar();
-    printf("\nMensagem: ");
-    scanf("%s",data.Mensagem);
-    return data;
-    // colocar nosso ip e essas coisa tudo
-
-}
-
-///CheckList
-// Verficar a resposta do ack
-// Definição de um tempo pro ack
