@@ -63,8 +63,11 @@ Para essas comunicações, obrigatoriamente utilize-se de um json com as seguint
 
 ## Exemplo de execução
 Para o server:
+
 ![Server](server.png)
+
 Para o client:
+
 ![Client](client.png)
 
 ## Observações
