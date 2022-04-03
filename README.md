@@ -6,6 +6,8 @@
 
 ![C](https://img.shields.io/badge/C-00599C?style=for-the-badge&logo=c&logoColor=white)
 
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+
 # Descrição
 Deve-se criar um chat via terminal do Linux. Portanto, deve-se desenvolver um programa, na linguagem de programação que desejarem, mas que rode exclusivamente no terminal do Linux, que faça:
 * Enviar mensagem para um outro programa na sua rede:
@@ -51,9 +53,15 @@ Para essas comunicações, obrigatoriamente utilize-se de um json com as seguint
 
 # Como Executar
 * Baixe o arquivo compactado presente nesse repositório.
-* execute no terminal o comando
-*
-*
+* Sera necessário dois terminais, um para o cliente e outro para o servidor.
+* No primeiro terminal execute o arquivo do servidor - servidor.py.
+  * ```python3 server.py```
+  * Agurde por alguma mensagem que será enviada para este servidor.
+  * Após receber uma mensagem é possível responde-la diretamente.
+* No segundo terminal execute o arquivo do cliente - client.py.
+  * ```python3 client.py```
+  * Insira o IP do servidor de destino.
+  * Insira a mensagem que deseja enviar.
 
 # Colaboradores
 * [Henrique Sartori Siqueira](https://github.com/h-ssiqueira/)
