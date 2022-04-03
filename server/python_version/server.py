@@ -6,11 +6,10 @@ UDP_IP = "127.0.0.1"
 UDP_PORT = 8080
 MESSAGE = b"Recived, ACK: OK!"
 
-#Pegando IP host 
+#Pegando IP host
 IP = socket.gethostbyname(socket.gethostname())
 
-sock = socket.socket(socket.AF_INET, # Internet
-                     socket.SOCK_DGRAM) # UDP
+sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM) # UDP
 sock.bind((IP, UDP_PORT))
 
 while True:
@@ -18,25 +17,24 @@ while True:
     #print(data.decode("utf-8"))
     decode = data.decode("utf-8")
     response = json.loads(json.loads(decode))
-    print("\n")
-    print(response)
+    print("\n\n",response,"\n")
     men = response["Mensagem"]
-    print("Mensagem do Client: %s" %(men))
+    print("Mensagem do Client: %s\n" %(men))
 
-    
+
     IP_O = response['IP_origem']
     P_O = response['Porta_origem']
     M = response['Mensagem']
     T = response['Timestamp']
     T_RESP = time.time()
-    
-    
+
+
     #Enviar ACK
     ACK = '{ "Ip_origem":"%s", "Ip_destino":"%s", "Porta_origem":8080, "Porta_destino":%s, "Timestamp da mensagem original":"%s", "Timestamp da mensagem de resposta":"%s", "ACK":true}' %(IP, IP_O, P_O, T, T_RESP)
 
-    BYTE_ACK = bytes(json.dumps(ACK),'UTF-8');
+    BYTE_ACK = bytes(json.dumps(ACK),'UTF-8')
     sock.sendto(BYTE_ACK, addr)
-    
+
 
     T_RESP = time.time()
     #Enviar Mensagem de reposta
