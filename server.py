@@ -2,7 +2,7 @@ import socket
 import json
 import time
 
-UDP_PORT = 8080
+UDP_PORT = 1500
 
 #Pegando IP host
 IP = socket.gethostbyname(socket.gethostname())
@@ -28,7 +28,7 @@ while True:
 
 
     #Enviar ACK
-    ACK = '{ "Ip_origem":"%s", "Ip_destino":"%s", "Porta_origem":8080, "Porta_destino":%s, "Timestamp da mensagem original":"%s", "Timestamp da mensagem de resposta":"%s", "ACK":true}' %(IP, IP_O, P_O, T, T_RESP)
+    ACK = '{ "Ip_origem":"%s", "Ip_destino":"%s", "Porta_origem":1500, "Porta_destino":%s, "Timestamp da mensagem original":"%s", "Timestamp da mensagem de resposta":"%s", "ACK":true}' %(IP, IP_O, P_O, T, T_RESP)
 
     BYTE_ACK = bytes(json.dumps(ACK),'UTF-8')
     sock.sendto(BYTE_ACK, addr)
@@ -37,6 +37,6 @@ while True:
     T_RESP = time.time()
     #Enviar Mensagem de reposta
     response = input("Digite uma mensagem de resposta (0 - para cancelar):")
-    RESPOSTA = '{ "Ip_origem":"%s", "Ip_destino":"%s", "Porta_origem":8080, "Porta_destino":%s, "Timestamp da mensagem original":"%s", "Timestamp da mensagem de resposta":"%s", "Mensagem original":"%s", "Mensagem de resposta":"%s"}' %(IP, IP_O, P_O, T, T_RESP, M, response)
+    RESPOSTA = '{ "Ip_origem":"%s", "Ip_destino":"%s", "Porta_origem":1500, "Porta_destino":%s, "Timestamp da mensagem original":"%s", "Timestamp da mensagem de resposta":"%s", "Mensagem original":"%s", "Mensagem de resposta":"%s"}' %(IP, IP_O, P_O, T, T_RESP, M, response)
     resposta_byte = bytes(json.dumps(RESPOSTA),'UTF-8')
     sock.sendto(resposta_byte, addr)
