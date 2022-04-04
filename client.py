@@ -7,7 +7,7 @@ ip = socket.gethostbyname(socket.gethostname())
 
 
 #UDP_ip = "127.0.0.1"
-udp_port = 8080
+udp_port = 1500
 #message = b"Hello, World!"
 
 ip_DEST = input("Insira o ip destino:")
@@ -20,12 +20,12 @@ message = input("Insira a Mensagem:")
 
 T = time.time()
 
-json_message = '{ "Ip_origem":"%s", "Ip_destino":"%s", "Porta_origem":%s, "Porta_destino":8080, "Timestamp da mensagem":"%s","Mensagem":"%s"}' %(ip, ip_DEST, udp_port, T, message)
+json_message = '{ "Ip_origem":"%s", "Ip_destino":"%s", "Porta_origem":%s, "Porta_destino":1500, "Timestamp da mensagem":"%s","Mensagem":"%s"}' %(ip, ip_DEST, udp_port, T, message)
 
 byte_message = bytes(json.dumps(json_message),'UTF-8')
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) # UDP
-sock.sendto(byte_message, (ip, udp_port))
+sock.sendto(byte_message, (ip_DEST, udp_port))
 
 #Esperando ACK
 data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
