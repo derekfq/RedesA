@@ -20,7 +20,7 @@ message = input("Insira a Mensagem:")
 
 T = time.time()
 
-json_message = '{ "IP_origem":"%s", "IP_destino":"%s", "Porta_origem":%s, "Porta_destino":8080, "Timestamp":"%s","Mensagem":"%s"}' %(ip, ip_DEST, udp_port, T, message)
+json_message = '{ "Ip_origem":"%s", "Ip_destino":"%s", "Porta_origem":%s, "Porta_destino":8080, "Timestamp da mensagem":"%s","Mensagem":"%s"}' %(ip, ip_DEST, udp_port, T, message)
 
 byte_message = bytes(json.dumps(json_message),'UTF-8')
 

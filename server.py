@@ -20,10 +20,10 @@ while True:
     print("Mensagem do Client: %s\n" %(men))
 
 
-    IP_O = response['IP_origem']
+    IP_O = response['Ip_origem']
     P_O = response['Porta_origem']
     M = response['Mensagem']
-    T = response['Timestamp']
+    T = response['Timestamp da mensagem']
     T_RESP = time.time()
 
 
